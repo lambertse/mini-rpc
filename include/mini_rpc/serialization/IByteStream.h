@@ -5,10 +5,13 @@
 #include "Buffer.h"
 
 namespace mini_rpc {
-namespace details {
 template <class BufferType>
 class BasicIByteStream {
-  enum State { Good = 1 << 0, Failed = 1 << 1, Eof = 1 << 2 };
+ public:
+  using State = uint8_t;
+  static constexpr State Good = 1;
+  static constexpr State Failed = 2;
+  static constexpr State Eof = 4;
 
  public:
   using SizeType = size_t;
@@ -66,9 +69,8 @@ class BasicIByteStream {
   SizeType currentPos_ = 0;
   State state_ = Good;
 };
-}  // namespace details
 
-class IByteStream : public details::BasicIByteStream<Buffer> {
+class IByteStream : public BasicIByteStream<Buffer> {
  public:
   using BasicIByteStream<Buffer>::BasicIByteStream;
   IByteStream(const IByteStream &other)

@@ -5,6 +5,15 @@ set(MINIRPC_TEST_BINARY_PATH ${CMAKE_BINARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${MINIRPC_TEST_BINARY_PATH})
 set(LIBRARY_OUTPUT_PATH ${MINIRPC_TEST_BINARY_PATH})
 
+# Set default build type to Debug if not specified
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
+# Forcing Debug flags
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+
+
 #Google test
 include(FetchContent)
 FetchContent_Declare(

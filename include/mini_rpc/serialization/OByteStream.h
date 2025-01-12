@@ -1,12 +1,18 @@
 #pragma once
 #include "Buffer.h"
+#include <cstring>
+#include <iostream>
 namespace mini_rpc {
 
 class OByteStream {
-  enum State { Good = 1 << 0, Failed = 1 << 1, Eof = 1 << 2 };
+public:
 
+  using State = uint8_t;
+  static constexpr State Good = 1;
+  static constexpr State Failed = 2;
+  static constexpr State Eof = 4;
  public:
-  using SizeType = uint8_t;
+  using SizeType = uint16_t;
   void write(const char *buf, SizeType size) {
     if (prepareNextWrite(size)) {
       std::memcpy(data_.data() + currentPos_, buf, size);
@@ -36,7 +42,7 @@ class OByteStream {
   const Buffer &bytes() const { return data_; }
 
  private:
-  Buffer data_;
+  Buffer data_ = "";
   SizeType currentPos_ = 0;
   State state_ = Good;
 };
