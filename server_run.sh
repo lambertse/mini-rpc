@@ -1,0 +1,1 @@
+build/server_mini_rpc

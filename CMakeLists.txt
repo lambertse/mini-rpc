@@ -1,64 +1,140 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16)
+project(mini_rpc)
 
-project(mini_rpc LANGUAGES CXX)
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-set(MAF_ENABLE_TEST ON)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
-set(MINIRPC_ROOT_DIR .)
-set(MINIRPC_LIB_INCLUDE_PATH ${MINIRPC_ROOT_DIR}/include)
-include_directories(${MINIRPC_LIB_INCLUDE_PATH})
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(ENABLE_TESTING OFF)
 
-# --> Collect platforms dependent sources/headers
-file(GLOB_RECURSE MINIRPC_COMMON_SOURCES
-    src/common/mini_rpc/*.cpp)
-file(GLOB_RECURSE MINIRPC_LIBRARY_HEADERS
-    include/*.h)
-file(GLOB_RECURSE MINIRPC_COMMON_PRIV_SOURCES
-    src/common/mini_rpc/*.h)
-# <-- platforms dependent sources/headers
-
-if(BUILD_SHARED_LIBS)
-    set(MINIRPC_BUILD_SHARED_LIB ${BUILD_SHARED_LIBS})
-endif(BUILD_SHARED_LIBS)
-
-if(MINIRPC_BUILD_SHARED_LIB)
-    add_definitions(-DMINIRPC_SHARED_LIBRARY)
+# ============================================================================
+# Platform Detection
+# ============================================================================
+if(APPLE)
+    set(PLATFORM "osx")
+    message(STATUS "Building for macOS")
+elseif(UNIX)
+    set(PLATFORM "linux")
+    message(STATUS "Building for Linux")
 else()
-    add_definitions(-DMINIRPC_STATIC_LIBRARY)
+    message(FATAL_ERROR "Unsupported platform")
 endif()
 
-# Build mini_rpc.lib
-set( MINIRPC_ALL_SOURCES
-    ${MINIRPC_COMMON_SOURCES}
-    ${MINIRPC_PLATFORM_SOURCES}
-    ${MINIRPC_LIBRARY_HEADERS}
-    ${MINIRPC_COMMON_PRIV_SOURCES}
-    ${MINIRPC_PLATFORM_HEADERS}
+# ============================================================================
+# Build Configuration
+# ============================================================================
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Building in Debug mode")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    message(STATUS "Building in Release mode")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG")
+endif()
+
+# ============================================================================
+# Dependencies
+# ============================================================================
+include(FetchContent)
+
+# Protobuf dependency
+FetchContent_Declare(
+    protobuf
+    GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+    GIT_TAG        v21.12
+    GIT_SUBMODULES_RECURSE ON
+)
+
+# Configure protobuf options
+set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(protobuf_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(protobuf_BUILD_PROTOC_BINARIES ON CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(protobuf)
+
+# ============================================================================
+# Protobuf Code Generation
+# ============================================================================
+file(GLOB PROTO_FILES "proto/*.proto")
+set(GENERATED_PROTO_SRCS)
+set(GENERATED_PROTO_HDRS)
+
+foreach(PROTO_FILE ${PROTO_FILES})
+    get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
+    set(GENERATED_SRC ${CMAKE_CURRENT_SOURCE_DIR}/include/mini_rpc/proto/${PROTO_NAME}.pb.cc)
+    set(GENERATED_HDR ${CMAKE_CURRENT_SOURCE_DIR}/include/mini_rpc/proto/${PROTO_NAME}.pb.h)
+
+    add_custom_command(
+        OUTPUT ${GENERATED_SRC} ${GENERATED_HDR}
+        COMMAND protobuf::protoc
+        ARGS --proto_path=${CMAKE_CURRENT_SOURCE_DIR}/proto
+             --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/include/mini_rpc/proto
+             ${PROTO_FILE}
+        DEPENDS ${PROTO_FILE} protobuf::protoc
+        COMMENT "Generating C++ code from ${PROTO_FILE}"
+        VERBATIM
     )
     
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    list(APPEND GENERATED_PROTO_SRCS ${GENERATED_SRC})
+    list(APPEND GENERATED_PROTO_HDRS ${GENERATED_HDR})
+endforeach()
 
-if(MINIRPC_BUILD_SHARED_LIB)
-    add_library(${PROJECT_NAME} SHARED ${MINIRPC_ALL_SOURCES})
-else()
-    add_library(${PROJECT_NAME} STATIC ${MINIRPC_ALL_SOURCES}
-        include/mini_rpc/serialization/SerializableObjectBegin.macro.h
-        include/mini_rpc/serialization/SerializableObjectEnd.macro.h)
-endif(MINIRPC_BUILD_SHARED_LIB)
+# Create a library for generated protobuf sources
+add_library(proto_generated STATIC ${GENERATED_PROTO_SRCS})
+target_include_directories(proto_generated PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto
+    ${protobuf_SOURCE_DIR}/src
+)
+target_link_libraries(proto_generated PUBLIC protobuf::libprotobuf)
 
-if(MAF_ENABLE_TEST)
+# ============================================================================
+# Server Executable
+# ============================================================================
+
+file(GLOB PROTO_SRCS "include/mini_rpc/proto/*.cc")
+file(GLOB SHARED_UTILS_SRC "src/shared/*.cpp")
+file(GLOB SERVER_SRC "src/server/*.cpp")
+file(GLOB SERVER_PLATFORM_SRC "src/server/${PLATFORM}/*.cpp")
+
+add_executable(server_${PROJECT_NAME} 
+    ${PROTO_SRCS}
+    ${SHARED_UTILS_SRC}
+    ${SERVER_SRC}
+    ${SERVER_PLATFORM_SRC}
+)
+
+target_include_directories(server_${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(server_${PROJECT_NAME} PRIVATE
+    protobuf::libprotobuf
+)
+
+# ============================================================================
+# Client Executable
+# ============================================================================
+set(CLIENT_SOURCES
+    src/client/client_main.cpp
+)
+
+add_executable(client_${PROJECT_NAME}
+    ${CLIENT_SOURCES}
+    ${PROTO_SRCS}
+    ${SHARED_UTILS_SRC})
+
+target_include_directories(client_${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include 
+)
+
+target_link_libraries(client_${PROJECT_NAME} PRIVATE
+    protobuf::libprotobuf
+)
+
+# ============================================================================
+# Testing (Optional)
+# ============================================================================
+if(ENABLE_TESTING)
     enable_testing()
-    add_subdirectory("test/")
-endif(MAF_ENABLE_TEST)
-
-# Grouping sources/headers into tree layout for IDE browsing
-if(NOT DISABLE_SOURCE_GROUP)
-    source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Sources" FILES ${MINIRPC_COMMON_SOURCES} )
-    source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Sources" FILES ${MINIRPC_PLATFORM_SOURCES} )
-    source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Sources" FILES ${MINIRPC_COMMON_PRIV_SOURCES} )
-    source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Sources" FILES ${MINIRPC_PLATFORM_HEADERS} )
-    source_group(TREE ${PROJECT_SOURCE_DIR}/include PREFIX "include" FILES ${MINIRPC_LIBRARY_HEADERS} )
-endif(NOT DISABLE_SOURCE_GROUP)
+    add_subdirectory(tests)
+endif()
