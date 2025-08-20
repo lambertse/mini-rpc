@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace mini_rpc::server {
+namespace mini_rpc {
 enum ConnectionState {
   REQUEST = 0,
   RESPONSE,
@@ -11,6 +11,7 @@ enum ConnectionState {
 };
 
 using Buffer = std::string;
+using RequestID = std::string;
 
 struct Connection {
   int fd;
@@ -22,4 +23,4 @@ struct Connection {
 
 using ConnectionSharedPtr = std::shared_ptr<Connection>;
 using FDConnectionMap = std::map<int, ConnectionSharedPtr>;
-}  // namespace mini_rpc::server
+}  // namespace mini_rpc

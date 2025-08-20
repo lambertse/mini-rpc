@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package mini_rpc.generate_rand;
+
+message Request {
+  required string contract_id = 1 [default = "generate_rand"]; // Nerver change this value
+
+  optional int32 min = 2; // Minimum value for the random number
+  optional int32 max = 3; // Maximum value for the random number
+}
+
+message Response {
+  required string contract_id = 1[default = "generate_rand"]; // Nerver change this valu 
+
+  optional int32 rand_num = 2; // The generated random number
+}
+

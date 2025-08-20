@@ -3,10 +3,11 @@
 #include <netinet/ip.h>
 
 #include <memory>
+#include <thread>
 
 #include "config.h"
 #include "connection_manager.h"
-#include "define.h"
+#include "mini_rpc/define.h"
 namespace mini_rpc::server {
 class ServerImpl {
  public:
@@ -15,6 +16,7 @@ class ServerImpl {
 
   bool init();
   bool start();
+  bool start_sync();
   bool stop();
   bool deinit();
 
@@ -31,5 +33,8 @@ class ServerImpl {
   FDConnectionMap _fd_2_conn;
   std::unique_ptr<class Poll> _poll;
   std::unique_ptr<ConnectionManager> _connection_manager;
+
+  bool _is_running = false;
+  std::thread _running_thread;
 };
 }  // namespace mini_rpc::server

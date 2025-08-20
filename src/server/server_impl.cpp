@@ -12,12 +12,20 @@
 namespace mini_rpc::server {
 ServerImpl::ServerImpl(ServerConfig config) : _server_fd(-1), _config(config) {
   _poll = std::make_unique<Poll>();
+  _poll->set_max_event(_config.max_connections);
+
   _connection_manager = std::make_unique<ConnectionManager>();
   _poll->set_connection_io_callback(
       std::bind(&ServerImpl::add_conection, this, std::placeholders::_1));
 }
 
-ServerImpl::~ServerImpl() {}
+ServerImpl::~ServerImpl() {
+  stop();
+  deinit();
+  if (_running_thread.joinable()) {
+    _running_thread.join();
+  }
+}
 
 bool ServerImpl::init() {
   if (!setup_socket()) {
@@ -31,14 +39,24 @@ bool ServerImpl::init() {
 }
 
 bool ServerImpl::start() {
+  _running_thread = std::thread([this]() { start_sync(); });
+  _running_thread.detach();
+  return true;
+}
+
+bool ServerImpl::start_sync() {
+  _is_running = true;
   if (_poll && !_poll->start()) {
-    LOG_INFO("Failed to start the poll");
+    _is_running = false;
+    LOG_INFO("Failed to start the poll in sync mode");
     return false;
   }
+  _is_running = true;
   return true;
 }
 
 bool ServerImpl::stop() {
+  _is_running = false;
   if (_poll) {
     _poll->stop();
   }

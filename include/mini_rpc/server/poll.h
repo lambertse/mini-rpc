@@ -4,8 +4,6 @@
 namespace mini_rpc::server {
 using ConnectionIOCallback = std::function<void(int fd)>;
 
-constexpr int MAX_EVENTS = 10;
-
 class Poll {
  public:
   Poll() = default;
@@ -15,6 +13,7 @@ class Poll {
   virtual bool stop();
   virtual void add_connection(int fd);
   virtual void remove_connection(int fd);
+  virtual void set_max_event(int max_event);
 
   void set_connection_io_callback(ConnectionIOCallback cb);
 
@@ -22,5 +21,6 @@ class Poll {
   ConnectionIOCallback _conn_io_cb;
   int _poll_fd = -1;
   bool _is_stopped = false;
+  int _max_event = 200;
 };
 }  // namespace mini_rpc::server

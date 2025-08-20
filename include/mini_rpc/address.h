@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace mini_rpc::server {
+namespace mini_rpc {
 class Address {
  public:
   Address(const std::string& name, int port) : name(name), port(port) {}
@@ -13,4 +13,4 @@ class Address {
   std::string name;
   int port;
 };
-}  // namespace mini_rpc::server
+}  // namespace mini_rpc

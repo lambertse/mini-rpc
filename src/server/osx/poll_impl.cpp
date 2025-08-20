@@ -25,9 +25,9 @@ bool Poll::init(int fd) {
 }
 
 bool Poll::start() {
-  struct kevent events[MAX_EVENTS];
+  struct kevent events[_max_event];
   while (!_is_stopped) {
-    auto nfds = kevent(_poll_fd, NULL, 0, events, MAX_EVENTS, NULL);
+    auto nfds = kevent(_poll_fd, NULL, 0, events, _max_event, NULL);
     if (nfds == 0) {
       LOG_INFO("kevent failed: " + std::to_string(errno));
       break;
@@ -69,4 +69,6 @@ void Poll::set_connection_io_callback(ConnectionIOCallback cb) {
 void Poll::remove_connection(int fd) {
   // Remove a connection from the poll
 }
+
+void Poll::set_max_event(int max_event) { _max_event = std::move(max_event); }
 }  // namespace mini_rpc::server

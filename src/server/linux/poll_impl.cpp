@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "mini_rpc/poll.h"
+#include "mini_rpc/server/poll.h"
 #include "mini_rpc/shared/logging.h"
 
 namespace mini_rpc::server {
@@ -26,9 +26,9 @@ bool Poll::init(int fd) {
 }
 
 bool Poll::start() {
-  struct epoll_event events[MAX_EVENTS];
+  struct epoll_event events[_max_event];
   while (!_is_stopped) {
-    auto nfds = epoll_wait(_poll_fd, events, MAX_EVENTS, -1);
+    auto nfds = epoll_wait(_poll_fd, events, _max_event, -1);
     for (int n = 0; n < nfds; ++n) {
       auto fd = events[n].data.fd;
       if (_conn_io_cb) {

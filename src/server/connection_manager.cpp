@@ -1,13 +1,11 @@
+#include <string.h>
 #include <unistd.h>
 
-#include "mini_rpc/proto/request.pb.h"
+#include "mini_rpc/define.h"
 #include "mini_rpc/server/connection_manager.h"
-#include "mini_rpc/server/define.h"
 #include "mini_rpc/shared/logging.h"
-#include "mini_rpc/shared/protobuf_handler.h"
 
 namespace mini_rpc::server {
-using namespace proto;
 using namespace shared;
 constexpr static size_t k_buffer_size = 1024;
 ConnectionManager::ConnectionManager() {}
@@ -104,25 +102,25 @@ bool ConnectionManager::try_one_request(ConnectionSharedPtr conn) {
   }
 
   auto buffer = conn->rbuf.substr(4);
-  request::Request req = ProtobufHandler::deserialize(buffer);
-  static int count = 0;
-  LOG_INFO(std::to_string(count++) + ". Incomming message: " + req.msg());
-
-  request::Response res;
-  res.set_msg("Responnse for message: " + req.msg() + " from server");
-  std::string serializedData;
-  size_t resLen = res.ByteSizeLong();
-  serializedData.resize(resLen);
-
-  if (!res.SerializeToArray(&serializedData[0], resLen)) {
-    LOG_INFO("Failed to serialize response");
-    conn->state = ConnectionState::END;
-    return false;
-  }
-
-  conn->wbuf.resize(resLen + 4);
-  memcpy(&conn->wbuf[0], &resLen, 4);
-  memcpy(&conn->wbuf[4], &serializedData[0], resLen);
+  // request::Request req = ProtobufHandler::deserialize(buffer);
+  // static int count = 0;
+  // LOG_INFO(std::to_string(count++) + ". Incomming message: " + req.msg());
+  //
+  // request::Response res;
+  // res.set_msg("Responnse for message: " + req.msg() + " from server");
+  // std::string serializedData;
+  // size_t resLen = res.ByteSizeLong();
+  // serializedData.resize(resLen);
+  //
+  // if (!res.SerializeToArray(&serializedData[0], resLen)) {
+  //   LOG_INFO("Failed to serialize response");
+  //   conn->state = ConnectionState::END;
+  //   return false;
+  // }
+  //
+  // conn->wbuf.resize(resLen + 4);
+  // memcpy(&conn->wbuf[0], &resLen, 4);
+  // memcpy(&conn->wbuf[4], &serializedData[0], resLen);
 
   // Remove the processed data from the read buffer
   size_t remaining = conn->rbuf.size() - (4 + len);

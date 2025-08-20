@@ -6,7 +6,6 @@ namespace mini_rpc::server {
 struct ServerConfig {
   int port;
   int max_connections;
-  int max_message_size;
   bool enable_logging;
   std::string log_level;
 
@@ -14,8 +13,7 @@ struct ServerConfig {
   static ServerConfig default_config() {
     static ServerConfig config;
     config.port = 8100;
-    config.max_connections = 100;
-    config.max_message_size = 4096;
+    config.max_connections = 200;
     config.enable_logging = true;
     config.log_level = "INFO";
     return config;

@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(ENABLE_TESTING OFF)
+set(ENABLE_EXAMPLES ON)
 
 # ============================================================================
 # Platform Detection
@@ -55,20 +55,20 @@ FetchContent_MakeAvailable(protobuf)
 # ============================================================================
 # Protobuf Code Generation
 # ============================================================================
-file(GLOB PROTO_FILES "proto/*.proto")
+file(GLOB PROTO_FILES "contract/proto/*.proto")
 set(GENERATED_PROTO_SRCS)
 set(GENERATED_PROTO_HDRS)
 
 foreach(PROTO_FILE ${PROTO_FILES})
     get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
-    set(GENERATED_SRC ${CMAKE_CURRENT_SOURCE_DIR}/include/mini_rpc/proto/${PROTO_NAME}.pb.cc)
-    set(GENERATED_HDR ${CMAKE_CURRENT_SOURCE_DIR}/include/mini_rpc/proto/${PROTO_NAME}.pb.h)
+    set(GENERATED_SRC ${CMAKE_CURRENT_SOURCE_DIR}/contract/${PROTO_NAME}.pb.cc)
+    set(GENERATED_HDR ${CMAKE_CURRENT_SOURCE_DIR}/contract/${PROTO_NAME}.pb.h)
 
     add_custom_command(
         OUTPUT ${GENERATED_SRC} ${GENERATED_HDR}
         COMMAND protobuf::protoc
-        ARGS --proto_path=${CMAKE_CURRENT_SOURCE_DIR}/proto
-             --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/include/mini_rpc/proto
+        ARGS --proto_path=${CMAKE_CURRENT_SOURCE_DIR}/contract/proto
+             --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/contract
              ${PROTO_FILE}
         DEPENDS ${PROTO_FILE} protobuf::protoc
         COMMENT "Generating C++ code from ${PROTO_FILE}"
@@ -82,7 +82,7 @@ endforeach()
 # Create a library for generated protobuf sources
 add_library(proto_generated STATIC ${GENERATED_PROTO_SRCS})
 target_include_directories(proto_generated PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto
+    ${CMAKE_CURRENT_SOURCE_DIR}/contract/proto
     ${protobuf_SOURCE_DIR}/src
 )
 target_link_libraries(proto_generated PUBLIC protobuf::libprotobuf)
@@ -91,43 +91,26 @@ target_link_libraries(proto_generated PUBLIC protobuf::libprotobuf)
 # Server Executable
 # ============================================================================
 
-file(GLOB PROTO_SRCS "include/mini_rpc/proto/*.cc")
+file(GLOB PROTO_SRCS "contract/*.cc")
 file(GLOB SHARED_UTILS_SRC "src/shared/*.cpp")
 file(GLOB SERVER_SRC "src/server/*.cpp")
 file(GLOB SERVER_PLATFORM_SRC "src/server/${PLATFORM}/*.cpp")
 
-add_executable(server_${PROJECT_NAME} 
+file(GLOB CLIENT_SRC "src/client/*.cpp")
+
+add_library(${PROJECT_NAME} STATIC 
     ${PROTO_SRCS}
     ${SHARED_UTILS_SRC}
     ${SERVER_SRC}
     ${SERVER_PLATFORM_SRC}
+    ${CLIENT_SRC}
 )
 
-target_include_directories(server_${PROJECT_NAME} PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(server_${PROJECT_NAME} PRIVATE
-    protobuf::libprotobuf
-)
-
-# ============================================================================
-# Client Executable
-# ============================================================================
-set(CLIENT_SOURCES
-    src/client/client_main.cpp
-)
-
-add_executable(client_${PROJECT_NAME}
-    ${CLIENT_SOURCES}
-    ${PROTO_SRCS}
-    ${SHARED_UTILS_SRC})
-
-target_include_directories(client_${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include 
-)
-
-target_link_libraries(client_${PROJECT_NAME} PRIVATE
+target_link_libraries(${PROJECT_NAME} PRIVATE
     protobuf::libprotobuf
 )
 
@@ -137,4 +120,9 @@ target_link_libraries(client_${PROJECT_NAME} PRIVATE
 if(ENABLE_TESTING)
     enable_testing()
     add_subdirectory(tests)
+endif()
+
+# ============================================================================
+if(ENABLE_EXAMPLES)
+    add_subdirectory(examples)
 endif()
