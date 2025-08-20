@@ -44,6 +44,8 @@ struct TableStruct_request_2eproto {
   static const uint32_t offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_request_2eproto;
+namespace mini_rpc {
+namespace proto {
 namespace request {
 class Request;
 struct RequestDefaultTypeInternal;
@@ -52,16 +54,20 @@ class Response;
 struct ResponseDefaultTypeInternal;
 extern ResponseDefaultTypeInternal _Response_default_instance_;
 }  // namespace request
+}  // namespace proto
+}  // namespace mini_rpc
 PROTOBUF_NAMESPACE_OPEN
-template<> ::request::Request* Arena::CreateMaybeMessage<::request::Request>(Arena*);
-template<> ::request::Response* Arena::CreateMaybeMessage<::request::Response>(Arena*);
+template<> ::mini_rpc::proto::request::Request* Arena::CreateMaybeMessage<::mini_rpc::proto::request::Request>(Arena*);
+template<> ::mini_rpc::proto::request::Response* Arena::CreateMaybeMessage<::mini_rpc::proto::request::Response>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
+namespace mini_rpc {
+namespace proto {
 namespace request {
 
 // ===================================================================
 
 class Request final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:request.Request) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mini_rpc.proto.request.Request) */ {
  public:
   inline Request() : Request(nullptr) {}
   ~Request() override;
@@ -171,7 +177,7 @@ class Request final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "request.Request";
+    return "mini_rpc.proto.request.Request";
   }
   protected:
   explicit Request(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -208,7 +214,7 @@ class Request final :
   std::string* _internal_mutable_msg();
   public:
 
-  // @@protoc_insertion_point(class_scope:request.Request)
+  // @@protoc_insertion_point(class_scope:mini_rpc.proto.request.Request)
  private:
   class _Internal;
 
@@ -226,7 +232,7 @@ class Request final :
 // -------------------------------------------------------------------
 
 class Response final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:request.Response) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mini_rpc.proto.request.Response) */ {
  public:
   inline Response() : Response(nullptr) {}
   ~Response() override;
@@ -336,7 +342,7 @@ class Response final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "request.Response";
+    return "mini_rpc.proto.request.Response";
   }
   protected:
   explicit Response(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -387,7 +393,7 @@ class Response final :
   void _internal_set_code(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:request.Response)
+  // @@protoc_insertion_point(class_scope:mini_rpc.proto.request.Response)
  private:
   class _Internal;
 
@@ -427,7 +433,7 @@ inline void Request::clear_msg() {
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline const std::string& Request::msg() const {
-  // @@protoc_insertion_point(field_get:request.Request.msg)
+  // @@protoc_insertion_point(field_get:mini_rpc.proto.request.Request.msg)
   return _internal_msg();
 }
 template <typename ArgT0, typename... ArgT>
@@ -435,11 +441,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void Request::set_msg(ArgT0&& arg0, ArgT... args) {
  _impl_._has_bits_[0] |= 0x00000001u;
  _impl_.msg_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:request.Request.msg)
+  // @@protoc_insertion_point(field_set:mini_rpc.proto.request.Request.msg)
 }
 inline std::string* Request::mutable_msg() {
   std::string* _s = _internal_mutable_msg();
-  // @@protoc_insertion_point(field_mutable:request.Request.msg)
+  // @@protoc_insertion_point(field_mutable:mini_rpc.proto.request.Request.msg)
   return _s;
 }
 inline const std::string& Request::_internal_msg() const {
@@ -454,7 +460,7 @@ inline std::string* Request::_internal_mutable_msg() {
   return _impl_.msg_.Mutable(GetArenaForAllocation());
 }
 inline std::string* Request::release_msg() {
-  // @@protoc_insertion_point(field_release:request.Request.msg)
+  // @@protoc_insertion_point(field_release:mini_rpc.proto.request.Request.msg)
   if (!_internal_has_msg()) {
     return nullptr;
   }
@@ -479,7 +485,7 @@ inline void Request::set_allocated_msg(std::string* msg) {
     _impl_.msg_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:request.Request.msg)
+  // @@protoc_insertion_point(field_set_allocated:mini_rpc.proto.request.Request.msg)
 }
 
 // -------------------------------------------------------------------
@@ -499,7 +505,7 @@ inline void Response::clear_msg() {
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline const std::string& Response::msg() const {
-  // @@protoc_insertion_point(field_get:request.Response.msg)
+  // @@protoc_insertion_point(field_get:mini_rpc.proto.request.Response.msg)
   return _internal_msg();
 }
 template <typename ArgT0, typename... ArgT>
@@ -507,11 +513,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void Response::set_msg(ArgT0&& arg0, ArgT... args) {
  _impl_._has_bits_[0] |= 0x00000001u;
  _impl_.msg_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:request.Response.msg)
+  // @@protoc_insertion_point(field_set:mini_rpc.proto.request.Response.msg)
 }
 inline std::string* Response::mutable_msg() {
   std::string* _s = _internal_mutable_msg();
-  // @@protoc_insertion_point(field_mutable:request.Response.msg)
+  // @@protoc_insertion_point(field_mutable:mini_rpc.proto.request.Response.msg)
   return _s;
 }
 inline const std::string& Response::_internal_msg() const {
@@ -526,7 +532,7 @@ inline std::string* Response::_internal_mutable_msg() {
   return _impl_.msg_.Mutable(GetArenaForAllocation());
 }
 inline std::string* Response::release_msg() {
-  // @@protoc_insertion_point(field_release:request.Response.msg)
+  // @@protoc_insertion_point(field_release:mini_rpc.proto.request.Response.msg)
   if (!_internal_has_msg()) {
     return nullptr;
   }
@@ -551,7 +557,7 @@ inline void Response::set_allocated_msg(std::string* msg) {
     _impl_.msg_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:request.Response.msg)
+  // @@protoc_insertion_point(field_set_allocated:mini_rpc.proto.request.Response.msg)
 }
 
 // optional int32 code = 2;
@@ -570,7 +576,7 @@ inline int32_t Response::_internal_code() const {
   return _impl_.code_;
 }
 inline int32_t Response::code() const {
-  // @@protoc_insertion_point(field_get:request.Response.code)
+  // @@protoc_insertion_point(field_get:mini_rpc.proto.request.Response.code)
   return _internal_code();
 }
 inline void Response::_internal_set_code(int32_t value) {
@@ -579,7 +585,7 @@ inline void Response::_internal_set_code(int32_t value) {
 }
 inline void Response::set_code(int32_t value) {
   _internal_set_code(value);
-  // @@protoc_insertion_point(field_set:request.Response.code)
+  // @@protoc_insertion_point(field_set:mini_rpc.proto.request.Response.code)
 }
 
 #ifdef __GNUC__
@@ -591,6 +597,8 @@ inline void Response::set_code(int32_t value) {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace request
+}  // namespace proto
+}  // namespace mini_rpc
 
 // @@protoc_insertion_point(global_scope)
 

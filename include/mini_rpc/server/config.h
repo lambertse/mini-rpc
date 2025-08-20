@@ -1,6 +1,8 @@
 #pragma once
+
 #include <string>
 
+namespace mini_rpc::server {
 struct ServerConfig {
   int port;
   int max_connections;
@@ -19,3 +21,4 @@ struct ServerConfig {
     return config;
   }
 };
+}  // namespace mini_rpc::server

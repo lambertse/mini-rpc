@@ -1,5 +1,7 @@
 #include "mini_rpc/shared/protobuf_handler.h"
 
+namespace mini_rpc::shared {
+using namespace proto;
 request::Request ProtobufHandler::deserialize(const std::string& data) {
   request::Request req;
   if (!req.ParseFromArray(data.data(), data.size())) {
@@ -15,3 +17,4 @@ std::string ProtobufHandler::serialize(const request::Request& object) {
   }
   return buffer;
 }
+}  // namespace mini_rpc::shared

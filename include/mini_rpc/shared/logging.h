@@ -2,7 +2,8 @@
 #include <iostream>
 #include <string>
 
-namespace logging {
+namespace mini_rpc {
+namespace shared {
 enum LogLevel {
   DEBUG = 1 << 0,
   INFO = 1 << 1,
@@ -10,6 +11,7 @@ enum LogLevel {
 
 static int log_level = INFO;
 
+namespace logging {
 static void debug(const std::string &str) {
   if (log_level ^ DEBUG) {
     return;
@@ -24,5 +26,8 @@ static void info(const std::string &str) {
 }
 
 }  // namespace logging
-#define LOG_DEBUG(str) logging::debug(str)
-#define LOG_INFO(str) logging::info(str)
+}  // namespace shared
+
+#define LOG_DEBUG(str) shared::logging::debug(str)
+#define LOG_INFO(str) shared::logging::info(str)
+}  // namespace mini_rpc

@@ -3,10 +3,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "mini_rpc/poll.h"
+#include "mini_rpc/server/poll.h"
 #include "mini_rpc/shared/logging.h"
 #include "mini_rpc/shared/utils.h"
 
+namespace mini_rpc::server {
 bool Poll::init(int fd) {
   _poll_fd = kqueue();
   if (_poll_fd == 0) {
@@ -68,3 +69,4 @@ void Poll::set_connection_io_callback(ConnectionIOCallback cb) {
 void Poll::remove_connection(int fd) {
   // Remove a connection from the poll
 }
+}  // namespace mini_rpc::server

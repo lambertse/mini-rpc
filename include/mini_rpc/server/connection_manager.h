@@ -2,6 +2,7 @@
 
 #include "define.h"
 
+namespace mini_rpc::server {
 class ConnectionManager {
  public:
   explicit ConnectionManager();
@@ -15,3 +16,4 @@ class ConnectionManager {
   void state_request(ConnectionSharedPtr conn);
   void state_response(ConnectionSharedPtr conn);
 };
+}  // namespace mini_rpc::server

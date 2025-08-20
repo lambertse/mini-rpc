@@ -7,7 +7,7 @@
 #include "config.h"
 #include "connection_manager.h"
 #include "define.h"
-
+namespace mini_rpc::server {
 class ServerImpl {
  public:
   ServerImpl(ServerConfig config = ServerConfig::default_config());
@@ -32,3 +32,4 @@ class ServerImpl {
   std::unique_ptr<class Poll> _poll;
   std::unique_ptr<ConnectionManager> _connection_manager;
 };
+}  // namespace mini_rpc::server

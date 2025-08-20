@@ -2,6 +2,8 @@
 #include <map>
 #include <memory>
 #include <string>
+
+namespace mini_rpc::server {
 constexpr int k_max_msg = 1024;
 
 enum ConnectionState {
@@ -23,3 +25,4 @@ struct Connection {
 };
 using ConnectionSharedPtr = std::shared_ptr<Connection>;
 using FDConnectionMap = std::map<int, ConnectionSharedPtr>;
+}  // namespace mini_rpc::server

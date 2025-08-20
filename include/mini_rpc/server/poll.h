@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-
+namespace mini_rpc::server {
 using ConnectionIOCallback = std::function<void(int fd)>;
 
 constexpr int MAX_EVENTS = 10;
@@ -23,3 +23,4 @@ class Poll {
   int _poll_fd = -1;
   bool _is_stopped = false;
 };
+}  // namespace mini_rpc::server

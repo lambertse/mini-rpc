@@ -2,13 +2,14 @@
 
 #include <memory>
 
-#include "mini_rpc/config.h"
-#include "mini_rpc/connection_manager.h"
-#include "mini_rpc/poll.h"
-#include "mini_rpc/server_impl.h"
+#include "mini_rpc/server/config.h"
+#include "mini_rpc/server/connection_manager.h"
+#include "mini_rpc/server/poll.h"
+#include "mini_rpc/server/server_impl.h"
 #include "mini_rpc/shared/logging.h"
 #include "mini_rpc/shared/utils.h"
 
+namespace mini_rpc::server {
 ServerImpl::ServerImpl(ServerConfig config) : _server_fd(-1), _config(config) {
   _poll = std::make_unique<Poll>();
   _connection_manager = std::make_unique<ConnectionManager>();
@@ -72,7 +73,7 @@ void ServerImpl::accept_new_connection() {
     LOG_INFO("accept failed: " + std::to_string(errno));
     exit(EXIT_FAILURE);
   }
-  utils::set_fb_nonblocking(connFD);
+  shared::Utils::set_fb_nonblocking(connFD);
   _poll->add_connection(connFD);
 
   LOG_DEBUG("accept_new_conn with fd " + std::to_string(connFD));
@@ -107,7 +108,7 @@ bool ServerImpl::setup_socket() {
     LOG_DEBUG("fd is not valid " + std::to_string(_server_fd));
     return false;
   }
-  utils::set_fb_nonblocking(_server_fd);
+  shared::Utils::set_fb_nonblocking(_server_fd);
 
   _addr.sin_family = AF_INET;
   _addr.sin_port = htons(_config.port);
@@ -123,3 +124,4 @@ bool ServerImpl::setup_socket() {
   }
   return true;
 }
+}  // namespace mini_rpc::server

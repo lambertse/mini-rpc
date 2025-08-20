@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package request;
+package mini_rpc.proto.request;
 
 message Request {
   optional string msg = 1;

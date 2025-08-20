@@ -1,11 +1,14 @@
 #include <unistd.h>
 
-#include "mini_rpc/connection_manager.h"
-#include "mini_rpc/define.h"
 #include "mini_rpc/proto/request.pb.h"
+#include "mini_rpc/server/connection_manager.h"
+#include "mini_rpc/server/define.h"
 #include "mini_rpc/shared/logging.h"
 #include "mini_rpc/shared/protobuf_handler.h"
 
+namespace mini_rpc::server {
+using namespace proto;
+using namespace shared;
 ConnectionManager::ConnectionManager() {}
 
 void ConnectionManager::remove_connection(int fd) {}
@@ -139,3 +142,4 @@ bool ConnectionManager::try_one_request(ConnectionSharedPtr conn) {
   state_response(conn);
   return conn->state == ConnectionState::REQUEST;
 }
+}  // namespace mini_rpc::server

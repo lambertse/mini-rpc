@@ -12,6 +12,9 @@
 #include "mini_rpc/shared/logging.h"
 #include "mini_rpc/shared/protobuf_handler.h"
 
+using namespace mini_rpc;
+using namespace mini_rpc::shared;
+using namespace mini_rpc::proto;
 static int send_req(const int &fd, const std::string &data) {
   u_int32_t len = data.length();
 

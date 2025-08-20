@@ -6,6 +6,7 @@
 #include "mini_rpc/poll.h"
 #include "mini_rpc/shared/logging.h"
 
+namespace mini_rpc::server {
 bool Poll::init(int fd) {
   struct epoll_event ev;
   _poll_fd = epoll_create1(0);
@@ -65,3 +66,4 @@ void Poll::remove_connection(int fd) {
 void Poll::set_connection_io_callback(ConnectionIOCallback cb) {
   _conn_io_cb = std::move(cb);
 }
+}  // namespace mini_rpc::server

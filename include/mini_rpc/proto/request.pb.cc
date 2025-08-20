@@ -20,6 +20,8 @@ PROTOBUF_PRAGMA_INIT_SEG
 namespace _pb = ::PROTOBUF_NAMESPACE_ID;
 namespace _pbi = _pb::internal;
 
+namespace mini_rpc {
+namespace proto {
 namespace request {
 PROTOBUF_CONSTEXPR Request::Request(
     ::_pbi::ConstantInitialized): _impl_{
@@ -51,48 +53,50 @@ struct ResponseDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ResponseDefaultTypeInternal _Response_default_instance_;
 }  // namespace request
+}  // namespace proto
+}  // namespace mini_rpc
 static ::_pb::Metadata file_level_metadata_request_2eproto[2];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_request_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_request_2eproto = nullptr;
 
 const uint32_t TableStruct_request_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::request::Request, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::request::Request, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::mini_rpc::proto::request::Request, _impl_._has_bits_),
+  PROTOBUF_FIELD_OFFSET(::mini_rpc::proto::request::Request, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::request::Request, _impl_.msg_),
+  PROTOBUF_FIELD_OFFSET(::mini_rpc::proto::request::Request, _impl_.msg_),
   0,
-  PROTOBUF_FIELD_OFFSET(::request::Response, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::request::Response, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::mini_rpc::proto::request::Response, _impl_._has_bits_),
+  PROTOBUF_FIELD_OFFSET(::mini_rpc::proto::request::Response, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::request::Response, _impl_.msg_),
-  PROTOBUF_FIELD_OFFSET(::request::Response, _impl_.code_),
+  PROTOBUF_FIELD_OFFSET(::mini_rpc::proto::request::Response, _impl_.msg_),
+  PROTOBUF_FIELD_OFFSET(::mini_rpc::proto::request::Response, _impl_.code_),
   0,
   1,
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 7, -1, sizeof(::request::Request)},
-  { 8, 16, -1, sizeof(::request::Response)},
+  { 0, 7, -1, sizeof(::mini_rpc::proto::request::Request)},
+  { 8, 16, -1, sizeof(::mini_rpc::proto::request::Response)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-  &::request::_Request_default_instance_._instance,
-  &::request::_Response_default_instance_._instance,
+  &::mini_rpc::proto::request::_Request_default_instance_._instance,
+  &::mini_rpc::proto::request::_Response_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_request_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\rrequest.proto\022\007request\"\026\n\007Request\022\013\n\003m"
-  "sg\030\001 \001(\t\"%\n\010Response\022\013\n\003msg\030\001 \001(\t\022\014\n\004cod"
-  "e\030\002 \001(\005"
+  "\n\rrequest.proto\022\026mini_rpc.proto.request\""
+  "\026\n\007Request\022\013\n\003msg\030\001 \001(\t\"%\n\010Response\022\013\n\003m"
+  "sg\030\001 \001(\t\022\014\n\004code\030\002 \001(\005"
   ;
 static ::_pbi::once_flag descriptor_table_request_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_request_2eproto = {
-    false, false, 87, descriptor_table_protodef_request_2eproto,
+    false, false, 102, descriptor_table_protodef_request_2eproto,
     "request.proto",
     &descriptor_table_request_2eproto_once, nullptr, 0, 2,
     schemas, file_default_instances, TableStruct_request_2eproto::offsets,
@@ -105,6 +109,8 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_request_
 
 // Force running AddDescriptors() at dynamic initialization time.
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_request_2eproto(&descriptor_table_request_2eproto);
+namespace mini_rpc {
+namespace proto {
 namespace request {
 
 // ===================================================================
@@ -121,7 +127,7 @@ Request::Request(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:request.Request)
+  // @@protoc_insertion_point(arena_constructor:mini_rpc.proto.request.Request)
 }
 Request::Request(const Request& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
@@ -140,7 +146,7 @@ Request::Request(const Request& from)
     _this->_impl_.msg_.Set(from._internal_msg(), 
       _this->GetArenaForAllocation());
   }
-  // @@protoc_insertion_point(copy_constructor:request.Request)
+  // @@protoc_insertion_point(copy_constructor:mini_rpc.proto.request.Request)
 }
 
 inline void Request::SharedCtor(
@@ -159,7 +165,7 @@ inline void Request::SharedCtor(
 }
 
 Request::~Request() {
-  // @@protoc_insertion_point(destructor:request.Request)
+  // @@protoc_insertion_point(destructor:mini_rpc.proto.request.Request)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -177,7 +183,7 @@ void Request::SetCachedSize(int size) const {
 }
 
 void Request::Clear() {
-// @@protoc_insertion_point(message_clear_start:request.Request)
+// @@protoc_insertion_point(message_clear_start:mini_rpc.proto.request.Request)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -204,7 +210,7 @@ const char* Request::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           #ifndef NDEBUG
-          ::_pbi::VerifyUTF8(str, "request.Request.msg");
+          ::_pbi::VerifyUTF8(str, "mini_rpc.proto.request.Request.msg");
           #endif  // !NDEBUG
         } else
           goto handle_unusual;
@@ -235,7 +241,7 @@ failure:
 
 uint8_t* Request::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:request.Request)
+  // @@protoc_insertion_point(serialize_to_array_start:mini_rpc.proto.request.Request)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -245,7 +251,7 @@ uint8_t* Request::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_msg().data(), static_cast<int>(this->_internal_msg().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "request.Request.msg");
+      "mini_rpc.proto.request.Request.msg");
     target = stream->WriteStringMaybeAliased(
         1, this->_internal_msg(), target);
   }
@@ -254,12 +260,12 @@ uint8_t* Request::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:request.Request)
+  // @@protoc_insertion_point(serialize_to_array_end:mini_rpc.proto.request.Request)
   return target;
 }
 
 size_t Request::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:request.Request)
+// @@protoc_insertion_point(message_byte_size_start:mini_rpc.proto.request.Request)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -287,7 +293,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Request::GetClassData() const 
 void Request::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
   auto* const _this = static_cast<Request*>(&to_msg);
   auto& from = static_cast<const Request&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:request.Request)
+  // @@protoc_insertion_point(class_specific_merge_from_start:mini_rpc.proto.request.Request)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -299,7 +305,7 @@ void Request::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
 }
 
 void Request::CopyFrom(const Request& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:request.Request)
+// @@protoc_insertion_point(class_specific_copy_from_start:mini_rpc.proto.request.Request)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -344,7 +350,7 @@ Response::Response(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:request.Response)
+  // @@protoc_insertion_point(arena_constructor:mini_rpc.proto.request.Response)
 }
 Response::Response(const Response& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
@@ -365,7 +371,7 @@ Response::Response(const Response& from)
       _this->GetArenaForAllocation());
   }
   _this->_impl_.code_ = from._impl_.code_;
-  // @@protoc_insertion_point(copy_constructor:request.Response)
+  // @@protoc_insertion_point(copy_constructor:mini_rpc.proto.request.Response)
 }
 
 inline void Response::SharedCtor(
@@ -385,7 +391,7 @@ inline void Response::SharedCtor(
 }
 
 Response::~Response() {
-  // @@protoc_insertion_point(destructor:request.Response)
+  // @@protoc_insertion_point(destructor:mini_rpc.proto.request.Response)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -403,7 +409,7 @@ void Response::SetCachedSize(int size) const {
 }
 
 void Response::Clear() {
-// @@protoc_insertion_point(message_clear_start:request.Response)
+// @@protoc_insertion_point(message_clear_start:mini_rpc.proto.request.Response)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -431,7 +437,7 @@ const char* Response::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           #ifndef NDEBUG
-          ::_pbi::VerifyUTF8(str, "request.Response.msg");
+          ::_pbi::VerifyUTF8(str, "mini_rpc.proto.request.Response.msg");
           #endif  // !NDEBUG
         } else
           goto handle_unusual;
@@ -471,7 +477,7 @@ failure:
 
 uint8_t* Response::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:request.Response)
+  // @@protoc_insertion_point(serialize_to_array_start:mini_rpc.proto.request.Response)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -481,7 +487,7 @@ uint8_t* Response::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_msg().data(), static_cast<int>(this->_internal_msg().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "request.Response.msg");
+      "mini_rpc.proto.request.Response.msg");
     target = stream->WriteStringMaybeAliased(
         1, this->_internal_msg(), target);
   }
@@ -496,12 +502,12 @@ uint8_t* Response::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:request.Response)
+  // @@protoc_insertion_point(serialize_to_array_end:mini_rpc.proto.request.Response)
   return target;
 }
 
 size_t Response::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:request.Response)
+// @@protoc_insertion_point(message_byte_size_start:mini_rpc.proto.request.Response)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -536,7 +542,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Response::GetClassData() const
 void Response::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
   auto* const _this = static_cast<Response*>(&to_msg);
   auto& from = static_cast<const Response&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:request.Response)
+  // @@protoc_insertion_point(class_specific_merge_from_start:mini_rpc.proto.request.Response)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -555,7 +561,7 @@ void Response::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTO
 }
 
 void Response::CopyFrom(const Response& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:request.Response)
+// @@protoc_insertion_point(class_specific_copy_from_start:mini_rpc.proto.request.Response)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -586,14 +592,16 @@ void Response::InternalSwap(Response* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace request
+}  // namespace proto
+}  // namespace mini_rpc
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::request::Request*
-Arena::CreateMaybeMessage< ::request::Request >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::request::Request >(arena);
+template<> PROTOBUF_NOINLINE ::mini_rpc::proto::request::Request*
+Arena::CreateMaybeMessage< ::mini_rpc::proto::request::Request >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::mini_rpc::proto::request::Request >(arena);
 }
-template<> PROTOBUF_NOINLINE ::request::Response*
-Arena::CreateMaybeMessage< ::request::Response >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::request::Response >(arena);
+template<> PROTOBUF_NOINLINE ::mini_rpc::proto::request::Response*
+Arena::CreateMaybeMessage< ::mini_rpc::proto::request::Response >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::mini_rpc::proto::request::Response >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

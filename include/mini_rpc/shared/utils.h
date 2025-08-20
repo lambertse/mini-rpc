@@ -4,19 +4,9 @@
 #include <cerrno>
 #include <iostream>
 
-namespace utils {
-static void set_fb_nonblocking(int &fd) {
-  errno = 0;
-  int flags = fcntl(fd, F_GETFL, 0);
-  if (errno) {
-    std::cout << "fcntl get error\n";
-    return;
-  }
-
-  fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-  if (errno) {
-    std::cout << "fcntl set error\n";
-    return;
-  }
-}
-}  // namespace utils
+namespace mini_rpc::shared {
+class Utils {
+ public:
+  static void set_fb_nonblocking(int &fd);
+};
+}  // namespace mini_rpc::shared
