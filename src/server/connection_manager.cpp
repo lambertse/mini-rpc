@@ -9,6 +9,7 @@
 namespace mini_rpc::server {
 using namespace proto;
 using namespace shared;
+constexpr static size_t k_buffer_size = 1024;
 ConnectionManager::ConnectionManager() {}
 
 void ConnectionManager::remove_connection(int fd) {}
@@ -26,7 +27,7 @@ void ConnectionManager::state_request(ConnectionSharedPtr conn) {
   do {
     ssize_t rv = 0;
     do {
-      size_t cap = k_max_msg - conn->rbuf.size();
+      size_t cap = k_buffer_size - conn->rbuf.size();
       std::string tmpbuf(cap, '\0');
       rv = read(conn->fd, &tmpbuf[0], cap);
       if (rv > 0) conn->rbuf.append(tmpbuf, 0, rv);
@@ -97,15 +98,11 @@ bool ConnectionManager::try_one_request(ConnectionSharedPtr conn) {
     return false;
   }
 
-  if (len > k_max_msg) {
-    LOG_DEBUG("Too long");
-    conn->state = ConnectionState::END;
-    return false;
-  }
   if (conn->rbuf.size() < 4 + len) {
     // Not enough data in the buffer
     return false;
   }
+
   auto buffer = conn->rbuf.substr(4);
   request::Request req = ProtobufHandler::deserialize(buffer);
   static int count = 0;
@@ -113,14 +110,11 @@ bool ConnectionManager::try_one_request(ConnectionSharedPtr conn) {
 
   request::Response res;
   res.set_msg("Responnse for message: " + req.msg() + " from server");
-  char serializedData[k_max_msg];
+  std::string serializedData;
   size_t resLen = res.ByteSizeLong();
-  if (resLen > k_max_msg - 4) {
-    LOG_INFO("Response too large");
-    conn->state = ConnectionState::END;
-    return false;
-  }
-  if (!res.SerializeToArray(serializedData, resLen)) {
+  serializedData.resize(resLen);
+
+  if (!res.SerializeToArray(&serializedData[0], resLen)) {
     LOG_INFO("Failed to serialize response");
     conn->state = ConnectionState::END;
     return false;
@@ -128,7 +122,7 @@ bool ConnectionManager::try_one_request(ConnectionSharedPtr conn) {
 
   conn->wbuf.resize(resLen + 4);
   memcpy(&conn->wbuf[0], &resLen, 4);
-  memcpy(&conn->wbuf[4], serializedData, resLen);
+  memcpy(&conn->wbuf[4], &serializedData[0], resLen);
 
   // Remove the processed data from the read buffer
   size_t remaining = conn->rbuf.size() - (4 + len);
